@@ -218,7 +218,7 @@ export default function GTIA() {
         {/* PANEL LISTA */}
         <div className="bg-white p-6 rounded-xl shadow border">
           <h2 className="text-2xl font-bold mb-3">
-            📋 Lista de participantes({alumnos.length})
+            📋 Lista de participantes ({alumnos.length})
           </h2>
 
           <textarea
