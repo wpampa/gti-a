@@ -13,8 +13,7 @@ export default function GTIA() {
   const [contadorSorteos, setContadorSorteos] = useState(0);
   const [audioContext, setAudioContext] = useState(null);
 
-  // Inicializar audio
-  useEffect(() => {
+    useEffect(() => {
     if (typeof window !== "undefined") {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       setAudioContext(ctx);
@@ -91,20 +90,17 @@ export default function GTIA() {
     setRotacion(0);
   };
 
-  // 🎨 Colores únicos, alternando FRÍO / CALIENTE
-  // Fríos: tonos entre 200° y 260°   (azules/morados)
-  // Calientes: tonos entre   0° y  60° (rojos/naranjas)
   const generarColor = (index) => {
-    const hueStep = 25; // separación entre colores para que no se parezcan mucho
+    const hueStep = 25; 
 
     if (index % 2 === 0) {
-      // FRÍO
+      
       const frioIndex = index / 2;
       const baseHueFrio = 200;
       const hue = (baseHueFrio + frioIndex * hueStep) % 360;
       return `hsl(${hue}, 80%, 55%)`;
     } else {
-      // CALIENTE
+      
       const calienteIndex = (index - 1) / 2;
       const baseHueCaliente = 0;
       const hue = (baseHueCaliente + calienteIndex * hueStep) % 360;
@@ -126,21 +122,15 @@ export default function GTIA() {
     const duracion = contadorSorteos % 2 === 0 ? 6000 : 8000;
     setContadorSorteos((c) => c + 1);
 
-    // Flecha a la DERECHA → el radio hacia la flecha es ángulo 0°
     const anguloFlecha = 0;
 
-    // Normalizar rotación actual para evitar acumulación rara
     const rotBase = ((rotacion % 360) + 360) % 360;
 
-    // Ángulo del centro del sector ganador en el sistema original
     const angCentro = indiceGanador * anguloBase + anguloBase / 2;
 
-    // Queremos que al final valga: angCentro + rotFinal ≡ anguloFlecha (mod 360)
-    // Como rotFinal = rotBase + Δ, resolvemos Δ ≡ anguloFlecha - (angCentro + rotBase)
     const delta =
       (anguloFlecha - (angCentro + rotBase) + 360) % 360;
 
-    // Le sumamos algunas vueltas completas para que sea vistoso
     const rotFinal = rotBase + 360 * 10 + delta;
 
     const inicio = performance.now();
@@ -154,7 +144,6 @@ export default function GTIA() {
       const angActual = rotBase + (rotFinal - rotBase) * easeOut;
       setRotacion(angActual);
 
-      // --- TIK: cada vez que un límite de sector cruza la flecha (ángulo 0°) ---
       const rotNorm = ((angActual % 360) + 360) % 360;
       const angRel = (anguloFlecha - rotNorm + 360) % 360;
       const sector = Math.floor(angRel / anguloBase);
@@ -163,12 +152,10 @@ export default function GTIA() {
         reproducirTik();
         ultimoSectorTik = sector;
       }
-      // ------------------------------------------------------------------------ //
 
       if (prog < 1) {
         requestAnimationFrame(animar);
       } else {
-        // Ajuste final exacto
         setRotacion(rotFinal);
 
         const color = generarColor(indiceGanador);
@@ -345,7 +332,7 @@ export default function GTIA() {
                     </text>
                   </g>
 
-                  {/* FLECHA DERECHA SIMPLE (apuntando al centro, sin adornos) */}
+                  {/* FLECHA DERECHA SIMPLE (apuntando al centro) */}
                   <g transform="translate(420,200)">
                     <path
                       d="M 0 -30 L -60 0 L 0 30 Z"
